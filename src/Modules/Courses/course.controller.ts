@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete, NotFoundException } from '@nestjs/common';
-import { CoursesService } from './course.service';
+import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('courses')
 export class CoursesController {
-    constructor(private readonly coursesService: CoursesService) {}
+    constructor(private readonly coursesService: CourseService) {}
 
     @Get()
     async findAll() {
@@ -16,7 +16,7 @@ export class CoursesController {
     async findOne(@Param('id') id: string) {
         const course = await this.coursesService.findOne(+id);
         if (!course) {
-        throw new NotFoundException(`Course with ID ${id} not found`);
+            throw new NotFoundException(`Course with ID ${id} not found`);
         }
         return course;
     }
@@ -34,5 +34,15 @@ export class CoursesController {
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return this.coursesService.remove(+id);
+    }
+
+    @Get(':id/prerequisites')
+    async getPrerequisites(@Param('id') id: string) {
+        return this.coursesService.getPrerequisites(+id);
+    }
+
+    @Patch(':id/prerequisites')
+    async updatePrerequisites(@Param('id') id: string, @Body('prerequisiteIds') prerequisiteIds: number[]) {
+        return this.coursesService.updatePrerequisites(+id, prerequisiteIds);
     }
 }

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsDate } from 'class-validator';
+import { IsString, IsNotEmpty, IsDate, IsNumber } from 'class-validator';
 
 export class CreateProfessorDto {
     @IsString()
@@ -8,4 +8,8 @@ export class CreateProfessorDto {
     @IsDate()
     @IsNotEmpty()
     hireDate: Date;
+
+    @IsNumber()
+    @IsNotEmpty()
+    departmentId: number;  
 }

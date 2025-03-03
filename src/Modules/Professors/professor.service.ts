@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { Professor } from './professor.entity';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
+import { Department } from '../Departments/department.entity';
 
 @Injectable()
 export class ProfessorsService {
     constructor(
         @InjectRepository(Professor)
         private readonly professorRepository: Repository<Professor>,
+        @InjectRepository(Department)
+        private readonly departmentRepository: Repository<Department> 
     ) {}
 
     async findAll(): Promise<Professor[]> {
@@ -25,9 +28,25 @@ export class ProfessorsService {
     }
 
     async create(createProfessorDto: CreateProfessorDto): Promise<Professor> {
-        const professor = this.professorRepository.create(createProfessorDto);
+        const { name, hireDate, departmentId } = createProfessorDto;
+    
+        const department = await this.departmentRepository.findOne({
+            where: { id: departmentId },
+        });
+    
+        if (!department) {
+            throw new Error('Department not found');
+        }
+    
+        const professor = this.professorRepository.create({
+            name,
+            hireDate,
+            department,
+        });
+    
         return this.professorRepository.save(professor);
     }
+    
 
     async update(id: number, updateProfessorDto: UpdateProfessorDto): Promise<Professor> {
         const professor = await this.findOne(id);
