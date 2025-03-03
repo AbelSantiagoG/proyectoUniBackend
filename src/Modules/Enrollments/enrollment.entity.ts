@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Unique, JoinColumn } from 'typeorm';
 import { Student } from '../Students/student.entity';
 import { Course } from '../Courses/course.entity';
 
@@ -8,10 +8,12 @@ export class Enrollment {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Student, (student) => student.enrollments)
+    @ManyToOne(() => Student, (student) => student.enrollments, { eager: true }) 
+    @JoinColumn({ name: 'studentId' })  
     student: Student;
 
-    @ManyToOne(() => Course, (course) => course.enrollments)
+    @ManyToOne(() => Course, (course) => course.enrollments, { eager: true }) 
+    @JoinColumn({ name: 'courseId' }) 
     course: Course;
 
     @Column({ type: 'date' })
