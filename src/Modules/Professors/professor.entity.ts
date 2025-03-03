@@ -13,7 +13,7 @@ export class Professor {
     @Column({ type: 'date' })
     hireDate: Date;
 
-    @ManyToOne(() => Department, (department) => department.professors)
+    @ManyToOne(() => Department, (department) => department.professors, { onDelete: 'CASCADE' })
     department: Department;
 
     @OneToMany(() => Course, (course) => course.professor)
