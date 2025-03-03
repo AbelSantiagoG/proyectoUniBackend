@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, NotFoundException, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -21,16 +22,19 @@ export class CoursesController {
         return course;
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     async create(@Body() createCourseDto: CreateCourseDto) {
         return this.coursesService.create(createCourseDto);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Patch(':id')
     async update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
         return this.coursesService.update(+id, updateCourseDto);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return this.coursesService.remove(+id);
@@ -41,6 +45,7 @@ export class CoursesController {
         return this.coursesService.getPrerequisites(+id);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Patch(':id/prerequisites')
     async updatePrerequisites(@Param('id') id: string, @Body('prerequisiteIds') prerequisiteIds: number[]) {
         return this.coursesService.updatePrerequisites(+id, prerequisiteIds);
