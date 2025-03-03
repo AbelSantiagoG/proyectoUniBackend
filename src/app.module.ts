@@ -9,6 +9,8 @@ import { StudentsModule } from './Modules/Students/student.module';
 import { ConfigModule } from '@nestjs/config';
 import { EnrollmentsModule } from './Modules/Enrollments/enrollment.module';
 import { GradesModule } from './Modules/Grades/grade.module';
+import { UserModule } from './Modules/Users/user.module';
+import { AuthModule } from './Modules/Auth/auth.module';
 
 @Module({
   imports: [
@@ -30,7 +32,10 @@ import { GradesModule } from './Modules/Grades/grade.module';
     SchedulesModule,
     StudentsModule,
     EnrollmentsModule,
-    GradesModule
+    GradesModule,
+    UserModule,
+    AuthModule
   ],
 })
 export class AppModule {}
+
