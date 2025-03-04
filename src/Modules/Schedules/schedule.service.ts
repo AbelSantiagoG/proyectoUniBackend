@@ -15,8 +15,13 @@ export class SchedulesService {
         private readonly courseRepository: Repository<Course>,
     ) {}
 
-    async findAll(): Promise<Schedule[]> {
-        return this.scheduleRepository.find({ relations: ['course'] });
+    async findAll(): Promise<any[]> {
+        const schedules = await this.scheduleRepository.find({ relations: ['course'] });
+        return schedules.map(schedule => ({
+            ...schedule,
+            courseId: schedule.course?.id, 
+            course: undefined,
+        }));
     }
 
     async findOne(id: number): Promise<Schedule> {
