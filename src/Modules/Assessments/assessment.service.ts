@@ -34,7 +34,11 @@ export class AssessmentsService {
     }
 
     async update(id: number, updateAssessmentDto: UpdateAssessmentDto): Promise<Assessment> {
-        const assessment = await this.findOne(id);
+        const assessment = await this.assessmentRepository.findOne({ where: { id } });
+        if (!assessment) {
+            throw new NotFoundException(`Assessment with ID ${id} not found`);
+        }
+
         Object.assign(assessment, updateAssessmentDto);
         return this.assessmentRepository.save(assessment);
     }

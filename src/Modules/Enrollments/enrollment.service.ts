@@ -56,7 +56,11 @@ export class EnrollmentsService {
     }
 
     async update(id: number, updateEnrollmentDto: UpdateEnrollmentDto): Promise<Enrollment> {
-        await this.enrollmentRepository.update(id, updateEnrollmentDto);
+        await this.enrollmentRepository.update(id, {
+            student: { id: updateEnrollmentDto.studentId },
+            course: { id: updateEnrollmentDto.courseId },
+            enrollmentDate: updateEnrollmentDto.enrollmentDate
+        });
         return this.findOne(id);
     }
 
