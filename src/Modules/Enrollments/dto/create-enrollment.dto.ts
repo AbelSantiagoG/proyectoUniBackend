@@ -1,4 +1,4 @@
-import { IsInt, IsDate } from 'class-validator';
+import { IsInt, IsDate, IsOptional, IsNumber, Min } from 'class-validator';
 
 export class CreateEnrollmentDto {
     @IsInt()
@@ -9,4 +9,9 @@ export class CreateEnrollmentDto {
 
     @IsDate()
     enrollmentDate: Date;
+
+    @IsOptional() 
+    @IsNumber()
+    @Min(0) 
+    finalGrade?: number;
 }

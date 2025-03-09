@@ -12,6 +12,7 @@ export class EnrollmentsService {
     constructor(
         @InjectRepository(Enrollment)
         private readonly enrollmentRepository: Repository<Enrollment>,
+
         @InjectRepository(Student)
         private readonly studentRepository: Repository<Student>,  
 
@@ -20,7 +21,7 @@ export class EnrollmentsService {
     ) {}
 
     async create(createEnrollmentDto: CreateEnrollmentDto): Promise<Enrollment> {
-        const { studentId, courseId, enrollmentDate } = createEnrollmentDto;
+        const { studentId, courseId, enrollmentDate, finalGrade } = createEnrollmentDto;
     
         const student = await this.studentRepository.findOne({ where: { id: studentId } });
         const course = await this.courseRepository.findOne({ where: { id: courseId } });
@@ -33,13 +34,14 @@ export class EnrollmentsService {
             student,
             course,
             enrollmentDate,
+            finalGrade
         });
     
         return this.enrollmentRepository.save(enrollment);
     }
 
     async findAll(): Promise<Enrollment[]> {
-        return this.enrollmentRepository.find();
+        return this.enrollmentRepository.find({ relations: ['student', 'course'] });
     }
 
     async findOne(id: number): Promise<Enrollment> {
@@ -59,7 +61,8 @@ export class EnrollmentsService {
         await this.enrollmentRepository.update(id, {
             student: { id: updateEnrollmentDto.studentId },
             course: { id: updateEnrollmentDto.courseId },
-            enrollmentDate: updateEnrollmentDto.enrollmentDate
+            enrollmentDate: updateEnrollmentDto.enrollmentDate,
+            finalGrade: updateEnrollmentDto.finalGrade
         });
         return this.findOne(id);
     }

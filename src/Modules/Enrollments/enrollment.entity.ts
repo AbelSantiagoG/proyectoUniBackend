@@ -27,6 +27,6 @@ export class Enrollment {
     @Column({ type: 'date', nullable: false })
     enrollmentDate: Date;
 
-    @Column({ type: 'float', nullable: true })
+    @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
     finalGrade?: number; 
 }
