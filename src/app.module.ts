@@ -24,6 +24,8 @@ import { AuthModule } from './Modules/Auth/auth.module';
       database: process.env.DB_NAME,
       autoLoadEntities: true, 
       synchronize: true, 
+      retryAttempts: 10, // Más intentos para dar tiempo a MySQL
+      retryDelay: 5000,   // Esperar 5 segundos entre intentos
     }),
     AssessmentsModule,
     ProfessorsModule,
